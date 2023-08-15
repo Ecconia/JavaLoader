@@ -1,6 +1,7 @@
 package io.github.pieter12345.javaloader.velocity;
 
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
 
@@ -48,6 +49,12 @@ public abstract class JavaLoaderVelocityProject extends JavaLoaderProject implem
 	@Override
 	public final Optional<?> getInstance() {
 		return Optional.of(this);
+	}
+	
+	@Override
+	public ExecutorService getExecutorService()
+	{
+		return null;
 	}
 	
 	/**
