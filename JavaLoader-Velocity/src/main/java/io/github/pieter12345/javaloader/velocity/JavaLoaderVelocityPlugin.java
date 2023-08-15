@@ -39,8 +39,8 @@ import io.github.pieter12345.javaloader.velocity.dependency.VelocityProjectDepen
  * This is the main class that will be loaded by Velocity.
  * @author P.J.S. Kools
  */
-@Plugin(id = "javaloader", name = "JavaLoader", version = JavaLoaderVelocityPlugin.VERSION,
-		authors = {JavaLoaderVelocityPlugin.AUTHOR}, description = "A plugin for the Velocity Minecraft proxy that"
+@Plugin(id = "javaloader", name = "JavaLoader", version = "1.0.0",
+		authors = {"Pieter12345/Woesh0007", "Ecconia"}, description = "A plugin for the Velocity Minecraft proxy that"
 				+ " allows you to compile, enable, disable and hotswap Java projects in runtime.")
 public class JavaLoaderVelocityPlugin {
 	
@@ -50,8 +50,7 @@ public class JavaLoaderVelocityPlugin {
 	private static final String PREFIX_ERROR =
 			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "JavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.RED + " ";
 	
-	protected static final String VERSION = Constants.VERSION;
-	protected static final String AUTHOR = "Pieter12345/Woesh0007";
+	protected static final String VERSION = "1.0.0";
 	
 	private static final int COMPILER_FEEDBACK_LIMIT = 5; // The max amount of warnings/errors to print per recompile.
 	
@@ -133,7 +132,7 @@ public class JavaLoaderVelocityPlugin {
 		
 		// Register "/javaloaderproxy" command.
 		CommandExecutor commandExecutor = new CommandExecutor(this.projectManager, this.projectStateListener, null,
-				"/javaloaderproxy", Arrays.asList(AUTHOR), VERSION,
+				"/javaloaderproxy", Arrays.asList("Pieter12345/Woesh0007", "Ecconia"), VERSION,
 				(String str) -> AnsiColor.colorize(str), COMPILER_FEEDBACK_LIMIT);
 		this.proxy.getCommandManager().register("javaloaderproxy",
 				new JavaLoaderProxyCommand(PREFIX_INFO, PREFIX_ERROR, commandExecutor, this.projectManager));

@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.Server;
 import org.bukkit.Warning;
 import org.bukkit.Warning.WarningState;
@@ -64,8 +63,6 @@ public class BukkitPluginLoader implements PluginLoader {
 	@Override
 	public Map<Class<? extends Event>, Set<RegisteredListener>>
 			createRegisteredListeners(Listener listener, final Plugin plugin) {
-		Validate.notNull(plugin, "Plugin can not be null");
-		Validate.notNull(listener, "Listener can not be null");
 		
 		boolean useTimings = server.getPluginManager().useTimings();
 		Map<Class<? extends Event>, Set<RegisteredListener>> ret =

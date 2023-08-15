@@ -1,8 +1,10 @@
-name: JavaLoader
+name: EccsJavaLoader
 main: io.github.pieter12345.javaloader.bukkit.JavaLoaderBukkitPlugin
 version: ${version}
-author: Pieter12345/Woesh0007
-load: postworld
+authors:
+    - Pieter12345/Woesh0007
+    - Ecconia
+load: POSTWORLD
 api-version: 1.13
 commands:
     javaloader:

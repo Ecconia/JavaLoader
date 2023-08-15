@@ -1,15 +1,15 @@
-# Generated files (maven).
+#Maven:
 target/
 .checkstyle
 
-# Eclipse setup.
+#Eclipse:
 .classpath
 .project
 .settings/
 
-# Intellij setup.
+#JetBrains:
 .idea/
 *.iml
 
-# Project specific.
+#Project:
 JavaProjects/
