@@ -470,7 +470,7 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 			// TAB-complete "/javaloader <arg>".
 			if(args.length == 1) {
 				List<String> ret = new ArrayList<String>();
-				for(String comp : new String[] {"help", "list", "load", "unload", "recompile"}) {
+				for(String comp : new String[] {"help", "list", "load", "unload", "recompile", "scan"}) {
 					if(comp.startsWith(search)) {
 						ret.add(comp);
 					}
@@ -503,24 +503,13 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 				// TAB-complete "/javaloader help <arg>".
 				if(args[0].equalsIgnoreCase("help")) {
 					List<String> ret = new ArrayList<String>();
-					for(String comp : new String[] {"help", "list", "recompile", "load", "unload"}) {
+					for(String comp : new String[] {"help", "list", "recompile", "load", "unload", "scan"}) {
 						if(comp.toLowerCase().startsWith(search)) {
 							ret.add(comp);
 						}
 					}
 					return ret;
 				}
-			}
-			
-			// TAB-complete "/javaloader help <arg>".
-			if(args.length == 2 && args[0].equalsIgnoreCase("help")) {
-				List<String> ret = new ArrayList<String>();
-				for(String comp : new String[] {"help", "list", "recompile", "load", "unload"}) {
-					if(comp.toLowerCase().startsWith(search)) {
-						ret.add(comp);
-					}
-				}
-				return ret;
 			}
 			
 			// Subcommand without tabcompleter.

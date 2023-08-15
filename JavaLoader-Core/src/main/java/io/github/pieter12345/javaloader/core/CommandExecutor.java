@@ -94,6 +94,8 @@ public class CommandExecutor {
 							+ "\n&3    Unloads the given or all projects."
 							+ "\n&6  - " + this.commandPrefix + "load <project, *>"
 							+ "\n&3    Loads the given or all projects."
+							+ "\n&6  - " + this.commandPrefix + "scan"
+							+ "\n&3    Searches for new projects on the file system."
 							+ (this.exitCommandHandler == null ? ""
 									: "\n&6  - " + this.commandPrefix + "exit"
 									+ "\n&3    Exits JavaLoader.")).split("\n"));
@@ -126,6 +128,10 @@ public class CommandExecutor {
 									+ "unload <project, *> &8-&3 Unloads the"
 									+ " given project or all projects when '*' is given."
 									+ " Projects that no longer exist will be removed."));
+							return;
+						case "scan":
+							sender.sendMessage(MessageType.INFO, this.colorizer.colorize("&6" + this.commandPrefix
+									+ "scan &8-&3 Scans for new projects on the file system."));
 							return;
 						case "exit":
 							if(this.exitCommandHandler != null) {
@@ -181,6 +187,10 @@ public class CommandExecutor {
 			
 			case "load":
 				this.handleLoadCommand(sender, cmdParts);
+				return;
+				
+			case "scan":
+				this.handleScanCommand(sender);
 				return;
 			
 			case "exit":
@@ -527,6 +537,15 @@ public class CommandExecutor {
 				return;
 			}
 		}
+	}
+	
+	private void handleScanCommand(final CommandSender sender) {
+		// Add new projects (happens when a new project directory is created).
+		var newProjects = this.projectManager.addProjectsFromProjectDirectory(this.projectStateListener);
+		
+		// Send feedback.
+		sender.sendMessage(MessageType.INFO, "Found " + newProjects.size()
+			+ " new project" + (newProjects.size() == 1 ? "" : "s") + ".");
 	}
 	
 	/**

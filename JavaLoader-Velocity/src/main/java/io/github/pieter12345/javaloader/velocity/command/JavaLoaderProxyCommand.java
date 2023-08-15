@@ -80,7 +80,7 @@ public class JavaLoaderProxyCommand implements SimpleCommand {
 		// TAB-complete "/javaloaderproxy <arg>".
 		if(args.length <= 1) {
 			List<String> ret = new ArrayList<String>();
-			for(String comp : new String[] {"help", "list", "load", "unload", "recompile"}) {
+			for(String comp : new String[] {"help", "list", "load", "unload", "recompile", "scan"}) {
 				if(comp.startsWith(search)) {
 					ret.add(comp);
 				}
@@ -114,7 +114,7 @@ public class JavaLoaderProxyCommand implements SimpleCommand {
 			// TAB-complete "/javaloader help <arg>".
 			if(args[0].equalsIgnoreCase("help")) {
 				List<String> ret = new ArrayList<String>();
-				for(String comp : new String[]{"help", "list", "recompile", "load", "unload"})
+				for(String comp : new String[]{"help", "list", "recompile", "load", "unload", "scan"})
 				{
 					if(comp.toLowerCase().startsWith(search)) {
 						ret.add(comp);
