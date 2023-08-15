@@ -751,9 +751,10 @@ public class ProjectManager {
 	
 	/**
 	 * Reads through the projects directory (as defined in the constructor and accessible through
-	 * {@link #getProjectsDir()}) and adds a new project from every directory within this projects directory that
-	 * does not end with ".disabled". All new projects will be added to this project manager.
-	 * @param projectStateLister - A listener to add to all newly created projects. This may be null.
+	 * {@link #getProjectsDir()}) and adds a new project from every directory within this projects directory that do not
+	 * match ignore criteria defined by {@link #shouldIgnoreProjectFolder(File)}.
+	 * All new projects will be added to this project manager.
+	 * @param projectStateListener - A listener to add to all newly created projects. This may be null.
 	 * @return The added projects.
 	 */
 	public Set<JavaProject> addProjectsFromProjectDirectory(ProjectStateListener projectStateListener) {
@@ -762,7 +763,7 @@ public class ProjectManager {
 			File[] projectDirs = this.projectsDir.listFiles();
 			if(projectDirs != null) {
 				for(File projectDir : projectDirs) {
-					if(projectDir.isDirectory() && !projectDir.getName().toLowerCase().endsWith(".disabled")
+					if(projectDir.isDirectory() && !shouldIgnoreProjectFolder(projectDir)
 							&& !this.projects.containsKey(projectDir.getName())) {
 						JavaProject project = new JavaProject(
 								projectDir.getName(), projectDir, this, this.dependencyParser, projectStateListener);
@@ -777,6 +778,7 @@ public class ProjectManager {
 	
 	/**
 	 * Adds and returns a JavaProject if the given projectName has a matching directory within the projects directory
+	 * that does not match the ignore criteria defined by {@link #shouldIgnoreProjectFolder(File)}
 	 * and has not yet been added to this project manager.
 	 * @param projectName - The name of the project to attempt to find and add.
 	 * @param projectStateLister - A listener to add to the newly created project. This may be null.
@@ -801,7 +803,7 @@ public class ProjectManager {
 		
 		// Create the project if it was found.
 		if(projectDir.getName().equals(projectName) && projectDir.isDirectory()
-				&& !projectDir.getName().toLowerCase().endsWith(".disabled")) {
+			&& !shouldIgnoreProjectFolder(projectDir)) {
 			JavaProject project = new JavaProject(
 					projectDir.getName(), projectDir, this, this.dependencyParser, projectStateListener);
 			this.projects.put(project.getName(), project);
@@ -810,6 +812,29 @@ public class ProjectManager {
 		
 		// Project not found.
 		return null;
+	}
+	
+	/**
+	 * Determines whether a project folder should be ignored,
+	 * by checking if its project folder name ends with ".disabled",
+	 * or a file ".jlignored" exists inside the project folder.
+	 * @param projectDir - The project folder.
+	 * @return True if the provided project folder should be ignored, false otherwise.
+	 */
+	private boolean shouldIgnoreProjectFolder(File projectDir) {
+		if(projectDir.getName().toLowerCase().endsWith(".disabled")) {
+			return true;
+		}
+		File[] projectFiles = projectDir.listFiles();
+		if(projectFiles == null) {
+			return false;
+		}
+		for(File projectFile: projectFiles) {
+			if(projectFile.isFile() && projectFile.getName().toLowerCase().equals(".jlignored")) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
