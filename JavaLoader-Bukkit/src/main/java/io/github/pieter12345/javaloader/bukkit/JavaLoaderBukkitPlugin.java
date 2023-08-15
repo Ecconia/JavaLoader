@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -476,17 +477,39 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 				}
 				return ret;
 			}
-			
-			// TAB-complete "/javaloader <load, unload, recompile> <arg>".
-			if(args.length == 2 && (args[0].equalsIgnoreCase("load")
-					|| args[0].equalsIgnoreCase("unload") || args[0].equalsIgnoreCase("recompile"))) {
-				List<String> ret = new ArrayList<String>();
-				for(String comp : this.projectManager.getProjectNames()) {
-					if(comp.toLowerCase().startsWith(search)) {
-						ret.add(comp);
-					}
+			// TAB-complete "/javaloader <subcommand> <arg>".
+			if(args.length == 2) {
+				// TAB-complete "/javaloader load <arg>".
+				if(args[0].equalsIgnoreCase("load")) {
+					return this.projectManager.getUnloadedProjectNames().stream()
+						.filter(e -> e.toLowerCase().startsWith(search))
+						.collect(Collectors.toList());
 				}
-				return ret;
+				
+				// TAB-complete "/javaloader unload <arg>".
+				if(args[0].equalsIgnoreCase("unload")) {
+					return this.projectManager.getLoadedProjectNames().stream()
+						.filter(e -> e.toLowerCase().startsWith(search))
+						.collect(Collectors.toList());
+				}
+				
+				// TAB-complete "/javaloader recompile <arg>".
+				if(args[0].equalsIgnoreCase("recompile")) {
+					return this.projectManager.getProjectNames().stream()
+						.filter(e -> e.toLowerCase().startsWith(search))
+						.collect(Collectors.toList());
+				}
+				
+				// TAB-complete "/javaloader help <arg>".
+				if(args[0].equalsIgnoreCase("help")) {
+					List<String> ret = new ArrayList<String>();
+					for(String comp : new String[] {"help", "list", "recompile", "load", "unload"}) {
+						if(comp.toLowerCase().startsWith(search)) {
+							ret.add(comp);
+						}
+					}
+					return ret;
+				}
 			}
 			
 			// TAB-complete "/javaloader help <arg>".

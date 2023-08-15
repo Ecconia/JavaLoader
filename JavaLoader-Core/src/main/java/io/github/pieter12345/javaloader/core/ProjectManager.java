@@ -9,7 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import io.github.pieter12345.graph.Graph;
 import io.github.pieter12345.graph.Graph.ChildBeforeParentGraphIterator;
@@ -160,6 +162,30 @@ public class ProjectManager {
 	 */
 	public List<String> getProjectNames() {
 		return new ArrayList<>(this.projects.keySet());
+	}
+	
+	/**
+	 * Gets the names of all unloaded JavaLoader projects in this ProjectManager.
+	 * @return A list containing all unloaded JavaLoader project names.
+	 */
+	public List<String> getUnloadedProjectNames() {
+		// Get all unloaded registered projects.
+		return this.projects.entrySet().stream()
+			.filter(e -> !e.getValue().isLoaded())
+			.map(Map.Entry::getKey)
+			.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Gets the names of all loaded JavaLoader projects in this ProjectManager.
+	 * @return A list containing all loaded JavaLoader project names.
+	 */
+	public List<String> getLoadedProjectNames() {
+		// Collect all loaded projects.
+		return this.projects.entrySet().stream()
+			.filter(e -> e.getValue().isLoaded())
+			.map(Map.Entry::getKey)
+			.collect(Collectors.toList());
 	}
 	
 	/**

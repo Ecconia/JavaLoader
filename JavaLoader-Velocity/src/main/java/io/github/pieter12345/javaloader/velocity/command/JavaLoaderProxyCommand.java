@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.velocitypowered.api.command.SimpleCommand;
 
@@ -88,15 +89,39 @@ public class JavaLoaderProxyCommand implements SimpleCommand {
 		}
 		
 		// TAB-complete "/javaloaderproxy <load, unload, recompile> <arg>".
-		if(args.length == 2 && (args[0].equalsIgnoreCase("load")
-				|| args[0].equalsIgnoreCase("unload") || args[0].equalsIgnoreCase("recompile"))) {
-			List<String> ret = new ArrayList<String>();
-			for(String comp : JavaLoaderProxyCommand.this.projectManager.getProjectNames()) {
-				if(comp.toLowerCase().startsWith(search)) {
-					ret.add(comp);
-				}
+		if(args.length == 2) {
+			// TAB-complete "/javaloaderproxy load <arg>".
+			if(args[0].equalsIgnoreCase("load")) {
+				return this.projectManager.getUnloadedProjectNames().stream()
+					.filter(e -> e.toLowerCase().startsWith(search))
+					.collect(Collectors.toList());
 			}
-			return ret;
+			
+			// TAB-complete "/javaloaderproxy unload <arg>".
+			if(args[0].equalsIgnoreCase("unload")) {
+				return this.projectManager.getLoadedProjectNames().stream()
+					.filter(e -> e.toLowerCase().startsWith(search))
+					.collect(Collectors.toList());
+			}
+			
+			// TAB-complete "/javaloaderproxy recompile <arg>".
+			if(args[0].equalsIgnoreCase("recompile")) {
+				return this.projectManager.getProjectNames().stream()
+					.filter(e -> e.toLowerCase().startsWith(search))
+					.collect(Collectors.toList());
+			}
+			
+			// TAB-complete "/javaloader help <arg>".
+			if(args[0].equalsIgnoreCase("help")) {
+				List<String> ret = new ArrayList<String>();
+				for(String comp : new String[]{"help", "list", "recompile", "load", "unload"})
+				{
+					if(comp.toLowerCase().startsWith(search)) {
+						ret.add(comp);
+					}
+				}
+				return ret;
+			}
 		}
 		
 		// Subcommand without tabcompleter.
