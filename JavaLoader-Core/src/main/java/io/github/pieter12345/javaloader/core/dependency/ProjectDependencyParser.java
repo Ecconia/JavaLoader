@@ -1,6 +1,9 @@
 package io.github.pieter12345.javaloader.core.dependency;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import io.github.pieter12345.javaloader.core.JavaProject;
 import io.github.pieter12345.javaloader.core.exceptions.DependencyException;
@@ -20,12 +23,12 @@ public class ProjectDependencyParser {
 	/**
 	 * Parses the given dependencies string and returns the {@link Dependency} objects that represent these
 	 * dependencies.
-	 * @param project - The {@link JavaProject} which's dependencies are parsed.
-	 * @param dependenciesStr - The dependencies string representation to parse.
-	 * @return An array containing the parsed dependencies.
+	 * @param project The {@link JavaProject} which's dependencies are parsed.
+	 * @param dependencyStr The dependencies string representation to parse.
+	 * @return A list containing the parsed dependencies.
 	 * @throws DependencyException If a dependency description is in an invalid format.
 	 */
-	public Dependency[] parseDependencies(JavaProject project, String dependencyStr) throws DependencyException {
+	public List<Dependency> parseDependencies(JavaProject project, String dependencyStr) throws DependencyException {
 		
 		// Replace cariage returns and tabs with whitespaces.
 		dependencyStr = dependencyStr.replaceAll("[\r\t]", " ");
@@ -45,12 +48,12 @@ public class ProjectDependencyParser {
 		
 		// Split and parse the dependencies.
 		if(dependencyStr.isEmpty()) {
-			return new Dependency[0];
+			return Collections.emptyList();
 		}
 		String[] dependencyStrs = dependencyStr.split("\n");
-		Dependency[] dependencies = new Dependency[dependencyStrs.length];
-		for(int i = 0; i < dependencyStrs.length; i++) {
-			dependencies[i] = this.parseDependency(project, dependencyStrs[i]);
+		List<Dependency> dependencies = new ArrayList<>(dependencyStrs.length);
+		for(String str : dependencyStrs) {
+			dependencies.add(this.parseDependency(project, str));
 		}
 		
 		// Return the dependencies.

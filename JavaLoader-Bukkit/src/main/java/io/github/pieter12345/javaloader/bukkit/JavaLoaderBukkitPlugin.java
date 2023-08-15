@@ -323,9 +323,9 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 		});
 		
 		// Print feedback.
-		JavaProject[] projects = this.projectManager.getProjects();
+		var projects = this.projectManager.getProjects();
 		this.logger.info("JavaLoader " + this.getDescription().getVersion() + " enabled. "
-				+ loadAllResult.loadedProjects.size() + "/" + projects.length + " projects loaded.");
+				+ loadAllResult.loadedProjects.size() + "/" + projects.size() + " projects loaded.");
 		
 		// Command sync is not required here since Bukkit does this in a later startup stage.
 		for(Entry<String, Set<Command>> entry : this.injectedCommandsMap.entrySet()) {
@@ -586,17 +586,17 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 	
 	/**
 	 * getProjects method.
-	 * @return An array containing all loaded JavaLoader project instances.
+	 * @return A list containing all loaded JavaLoader project instances.
 	 */
-	public JavaLoaderProject[] getProjects() {
+	public List<JavaLoaderProject> getProjects() {
 		return this.projectManager.getProjectInstances();
 	}
 	
 	/**
 	 * getProjectNames method.
-	 * @return An array containing all loaded JavaLoader project names.
+	 * @return A list containing all JavaLoader project names.
 	 */
-	public String[] getProjectNames() {
+	public List<String> getProjectNames() {
 		return this.projectManager.getProjectNames();
 	}
 	

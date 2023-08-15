@@ -151,12 +151,11 @@ public class CommandExecutor {
 				if(cmdParts.length == 1) {
 					
 					// Get all projects and sort them.
-					JavaProject[] projects = this.projectManager.getProjects();
-					List<JavaProject> sortedProjects = Arrays.<JavaProject>asList(projects);
+					List<JavaProject> sortedProjects = this.projectManager.getProjects();
 					sortedProjects.sort((JavaProject p1, JavaProject p2) -> p1.getName().compareTo(p2.getName()));
 					
 					// Give feedback for having no projects available.
-					if(projects.length == 0) {
+					if(sortedProjects.isEmpty()) {
 						sender.sendMessage(MessageType.INFO, "There are no projects available.");
 						return;
 					}

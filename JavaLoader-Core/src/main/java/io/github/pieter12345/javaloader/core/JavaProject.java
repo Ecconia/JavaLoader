@@ -44,7 +44,7 @@ public class JavaProject {
 	private File srcDir;
 	private JavaProjectClassLoader classLoader = null;
 	private JavaLoaderProject projectInstance = null;
-	private Dependency[] dependencies = null;
+	private List<Dependency> dependencies = null;
 	private boolean isLoaded = false;
 	private boolean isDisabled;
 	private String version = null;
@@ -104,7 +104,7 @@ public class JavaProject {
 			// Get the dependencies and validate their existence.
 			// For JavaLoader projects, also validate that the project exists in the project manger.
 			final File dependenciesFile = new File(this.projectDir.getAbsoluteFile(), "dependencies.txt");
-			Dependency[] dependencies = this.readDependencies(dependenciesFile);
+			var dependencies = this.readDependencies(dependenciesFile);
 			List<File> dependencyFiles = new ArrayList<File>();
 			for(Dependency dependency : dependencies) {
 				
@@ -340,8 +340,7 @@ public class JavaProject {
 		List<File> dependencyFiles = new ArrayList<File>();
 		List<ClassLoader> dependencyProjectClassLoaders = new ArrayList<ClassLoader>();
 		if(this.dependencies != null) {
-			for(int i = 0; i < this.dependencies.length; i++) {
-				Dependency dependency = this.dependencies[i];
+			for(Dependency dependency : this.dependencies) {
 				if(dependency instanceof ProjectDependency) {
 					
 					// Get the project.
@@ -768,8 +767,8 @@ public class JavaProject {
 	 * the next compile, use the {@link #getSourceDependencies()} method.
 	 * @return The dependencies or null if no dependencies were defined.
 	 */
-	public Dependency[] getDependencies() {
-		return (this.dependencies == null ? null : this.dependencies.clone());
+	public List<Dependency> getDependencies() {
+		return (this.dependencies == null ? null : new ArrayList<>(this.dependencies));
 	}
 	
 	/**
@@ -777,10 +776,10 @@ public class JavaProject {
 	 * for loading, use the {@link #getDependencies()} method.
 	 * This method reads the dependencies again for every call, since the user might change them between calls.
 	 * @return The dependencies or null if no dependencies were defined.
-	 * @throws DependencyException If a dependency description in the depencendies file is in an invalid format.
+	 * @throws DependencyException If a dependency description in the dependencies file is in an invalid format.
 	 * @throws IOException If an I/O error occurred while reading the dependencies file.
 	 */
-	public Dependency[] getSourceDependencies() throws IOException, DependencyException {
+	public List<Dependency> getSourceDependencies() throws IOException, DependencyException {
 		return this.readDependencies(new File(this.projectDir.getAbsoluteFile(), "dependencies.txt"));
 	}
 	
@@ -819,10 +818,10 @@ public class JavaProject {
 	 * @throws DependencyException If a dependency description is in an invalid format.
 	 * @throws IOException If an I/O error occurred while reading the dependencyFile.
 	 */
-	private Dependency[] readDependencies(File dependencyFile) throws IOException, DependencyException {
+	private List<Dependency> readDependencies(File dependencyFile) throws IOException, DependencyException {
 		String dependencyFileContents = Utils.readFile(dependencyFile, StandardCharsets.UTF_8);
 		if(dependencyFileContents == null) {
-			return new Dependency[0]; // No dependencies available.
+			return Collections.emptyList(); // No dependencies available.
 		}
 		return this.dependencyParser.parseDependencies(this, dependencyFileContents);
 	}

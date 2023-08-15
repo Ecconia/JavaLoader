@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -151,9 +152,9 @@ public class JavaLoaderVelocityPlugin {
 		this.enabled = true;
 		
 		// Print feedback.
-		JavaProject[] projects = this.projectManager.getProjects();
+		var projects = this.projectManager.getProjects();
 		this.logger.info("JavaLoader " + VERSION + " enabled. "
-				+ loadAllResult.loadedProjects.size() + "/" + projects.length + " projects loaded.");
+				+ loadAllResult.loadedProjects.size() + "/" + projects.size() + " projects loaded.");
 	}
 	
 	public void disable() {
@@ -254,17 +255,17 @@ public class JavaLoaderVelocityPlugin {
 	
 	/**
 	 * getProjects method.
-	 * @return An array containing all loaded JavaLoader project instances.
+	 * @return A list containing all loaded JavaLoader project instances.
 	 */
-	public JavaLoaderProject[] getProjects() {
+	public List<JavaLoaderProject> getProjects() {
 		return this.projectManager.getProjectInstances();
 	}
 	
 	/**
 	 * getProjectNames method.
-	 * @return An array containing all loaded JavaLoader project names.
+	 * @return A list containing all JavaLoader project names.
 	 */
-	public String[] getProjectNames() {
+	public List<String> getProjectNames() {
 		return this.projectManager.getProjectNames();
 	}
 }

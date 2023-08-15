@@ -133,9 +133,9 @@ public class ProjectManager {
 	
 	/**
 	 * getProjectInstances method.
-	 * @return An array containing all loaded JavaLoader project instances.
+	 * @return A list containing all loaded JavaLoader project instances.
 	 */
-	public JavaLoaderProject[] getProjectInstances() {
+	public List<JavaLoaderProject> getProjectInstances() {
 		ArrayList<JavaLoaderProject> instances = new ArrayList<JavaLoaderProject>(this.projects.size());
 		for(JavaProject project : this.projects.values()) {
 			JavaLoaderProject instance = project.getInstance();
@@ -143,23 +143,23 @@ public class ProjectManager {
 				instances.add(instance);
 			}
 		}
-		return instances.toArray(new JavaLoaderProject[instances.size()]);
+		return instances;
 	}
 	
 	/**
 	 * Gets all JavaProject projects in this ProjectManager.
-	 * @return An array containing all loaded JavaLoader projects.
+	 * @return A list containing all loaded JavaLoader projects.
 	 */
-	public JavaProject[] getProjects() {
-		return this.projects.values().toArray(new JavaProject[0]);
+	public List<JavaProject> getProjects() {
+		return new ArrayList<>(this.projects.values());
 	}
 	
 	/**
 	 * Gets the names of all JavaLoader projects in this ProjectManager.
-	 * @return An array containing all loaded JavaLoader project names.
+	 * @return A list containing all JavaLoader project names.
 	 */
-	public String[] getProjectNames() {
-		return this.projects.keySet().toArray(new String[0]);
+	public List<String> getProjectNames() {
+		return new ArrayList<>(this.projects.keySet());
 	}
 	
 	/**
@@ -354,7 +354,7 @@ public class ProjectManager {
 			}
 			
 			// Get the dependencies of the project.
-			Dependency[] dependencies;
+			List<Dependency> dependencies;
 			if(useSourceDependencies) {
 				try {
 					dependencies = project.getSourceDependencies();
