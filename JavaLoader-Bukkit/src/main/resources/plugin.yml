@@ -7,8 +7,7 @@ authors:
 load: POSTWORLD
 api-version: 1.13
 commands:
-    javaloader:
+    javaloaderecc:
         description: This plugin can compile, load, unload and hotswap java projects in runtime.
-        usage: /javaloader <recompile, load, unload> [project]
-        permission: javaloader.use
+        permission: eccsjavaloader.use
         permission-message: You do not have permission to use this command.

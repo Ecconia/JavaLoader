@@ -63,9 +63,9 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 	
 	// Variables & Constants.
 	private static final String PREFIX_INFO =
-			ChatColor.GOLD + "[" + ChatColor.DARK_AQUA + "JavaLoader" + ChatColor.GOLD + "]" + ChatColor.GREEN + " ";
+			ChatColor.GOLD + "[" + ChatColor.DARK_AQUA + "EccsJavaLoader" + ChatColor.GOLD + "]" + ChatColor.GREEN + " ";
 	private static final String PREFIX_ERROR =
-			ChatColor.GOLD + "[" + ChatColor.DARK_AQUA + "JavaLoader" + ChatColor.GOLD + "]" + ChatColor.RED + " ";
+			ChatColor.GOLD + "[" + ChatColor.DARK_AQUA + "EccsJavaLoader" + ChatColor.GOLD + "]" + ChatColor.RED + " ";
 	private final Logger logger;
 	
 	private static final int COMPILER_FEEDBACK_LIMIT = 5; // The max amount of warnings/errors to print per recompile.
@@ -325,7 +325,7 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 		
 		// Print feedback.
 		var projects = this.projectManager.getProjects();
-		this.logger.info("JavaLoader " + this.getDescription().getVersion() + " enabled. "
+		this.logger.info("EccsJavaLoader " + this.getDescription().getVersion() + " enabled. "
 				+ loadAllResult.loadedProjects.size() + "/" + projects.size() + " projects loaded.");
 		
 		// Command sync is not required here since Bukkit does this in a later startup stage.
@@ -354,14 +354,14 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 		this.commandExecutor = null;
 		
 		// Print feedback.
-		this.logger.info("JavaLoader " + this.getDescription().getVersion() + " disabled.");
+		this.logger.info("EccsJavaLoader " + this.getDescription().getVersion() + " disabled.");
 	}
 	
 	@Override
 	public boolean onCommand(final org.bukkit.command.CommandSender sender, Command cmd, String label, String[] args) {
 		
 		// Check if the plugin is enabled and validate the command prefix.
-		if(!this.isEnabled() || !cmd.getName().equalsIgnoreCase("javaloader")) {
+		if(!this.isEnabled()) {
 			return false;
 		}
 		
@@ -462,60 +462,56 @@ public class JavaLoaderBukkitPlugin extends JavaPlugin {
 	}
 	
 	@Override
-	public List<String> onTabComplete(
-			org.bukkit.command.CommandSender sender, Command command, String alias, String[] args) {
-		if(command.getName().equals("javaloader")) {
-			String search = args[args.length - 1].toLowerCase();
+	public List<String> onTabComplete(org.bukkit.command.CommandSender sender, Command command, String alias, String[] args) {
+		String search = args[args.length - 1].toLowerCase();
+		
+		// TAB-complete "/javaloader <arg>".
+		if(args.length == 1) {
+			List<String> ret = new ArrayList<String>();
+			for(String comp : new String[] {"help", "list", "load", "unload", "recompile", "scan"}) {
+				if(comp.startsWith(search)) {
+					ret.add(comp);
+				}
+			}
+			return ret;
+		}
+		// TAB-complete "/javaloader <subcommand> <arg>".
+		if(args.length == 2) {
+			// TAB-complete "/javaloader load <arg>".
+			if(args[0].equalsIgnoreCase("load")) {
+				return this.projectManager.getUnloadedProjectNames().stream()
+					.filter(e -> e.toLowerCase().startsWith(search))
+					.collect(Collectors.toList());
+			}
 			
-			// TAB-complete "/javaloader <arg>".
-			if(args.length == 1) {
+			// TAB-complete "/javaloader unload <arg>".
+			if(args[0].equalsIgnoreCase("unload")) {
+				return this.projectManager.getLoadedProjectNames().stream()
+					.filter(e -> e.toLowerCase().startsWith(search))
+					.collect(Collectors.toList());
+			}
+			
+			// TAB-complete "/javaloader recompile <arg>".
+			if(args[0].equalsIgnoreCase("recompile")) {
+				return this.projectManager.getProjectNames().stream()
+					.filter(e -> e.toLowerCase().startsWith(search))
+					.collect(Collectors.toList());
+			}
+			
+			// TAB-complete "/javaloader help <arg>".
+			if(args[0].equalsIgnoreCase("help")) {
 				List<String> ret = new ArrayList<String>();
-				for(String comp : new String[] {"help", "list", "load", "unload", "recompile", "scan"}) {
-					if(comp.startsWith(search)) {
+				for(String comp : new String[] {"help", "list", "recompile", "load", "unload", "scan"}) {
+					if(comp.toLowerCase().startsWith(search)) {
 						ret.add(comp);
 					}
 				}
 				return ret;
 			}
-			// TAB-complete "/javaloader <subcommand> <arg>".
-			if(args.length == 2) {
-				// TAB-complete "/javaloader load <arg>".
-				if(args[0].equalsIgnoreCase("load")) {
-					return this.projectManager.getUnloadedProjectNames().stream()
-						.filter(e -> e.toLowerCase().startsWith(search))
-						.collect(Collectors.toList());
-				}
-				
-				// TAB-complete "/javaloader unload <arg>".
-				if(args[0].equalsIgnoreCase("unload")) {
-					return this.projectManager.getLoadedProjectNames().stream()
-						.filter(e -> e.toLowerCase().startsWith(search))
-						.collect(Collectors.toList());
-				}
-				
-				// TAB-complete "/javaloader recompile <arg>".
-				if(args[0].equalsIgnoreCase("recompile")) {
-					return this.projectManager.getProjectNames().stream()
-						.filter(e -> e.toLowerCase().startsWith(search))
-						.collect(Collectors.toList());
-				}
-				
-				// TAB-complete "/javaloader help <arg>".
-				if(args[0].equalsIgnoreCase("help")) {
-					List<String> ret = new ArrayList<String>();
-					for(String comp : new String[] {"help", "list", "recompile", "load", "unload", "scan"}) {
-						if(comp.toLowerCase().startsWith(search)) {
-							ret.add(comp);
-						}
-					}
-					return ret;
-				}
-			}
-			
-			// Subcommand without tabcompleter.
-			return Collections.emptyList();
 		}
-		return null;
+		
+		// Subcommand without tabcompleter.
+		return Collections.emptyList();
 	}
 	
 	/**

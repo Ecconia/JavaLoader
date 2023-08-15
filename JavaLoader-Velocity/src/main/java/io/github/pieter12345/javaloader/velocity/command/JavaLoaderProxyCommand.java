@@ -69,7 +69,7 @@ public class JavaLoaderProxyCommand implements SimpleCommand {
 	
 	@Override
 	public boolean hasPermission(Invocation invocation) {
-		return invocation.source().hasPermission("javaloader.use");
+		return invocation.source().hasPermission("eccsjavaloader.use");
 	}
 	
 	@Override

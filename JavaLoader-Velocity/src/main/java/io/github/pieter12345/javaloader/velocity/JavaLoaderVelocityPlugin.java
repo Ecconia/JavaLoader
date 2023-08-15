@@ -40,16 +40,16 @@ import io.github.pieter12345.javaloader.velocity.dependency.VelocityProjectDepen
  * This is the main class that will be loaded by Velocity.
  * @author P.J.S. Kools
  */
-@Plugin(id = "javaloader", name = "JavaLoader", version = "1.0.0",
+@Plugin(id = "eccsjavaloader", name = "EccsJavaLoader", version = "1.0.0",
 		authors = {"Pieter12345/Woesh0007", "Ecconia"}, description = "A plugin for the Velocity Minecraft proxy that"
 				+ " allows you to compile, enable, disable and hotswap Java projects in runtime.")
 public class JavaLoaderVelocityPlugin {
 	
 	// Variables & Constants.
 	private static final String PREFIX_INFO =
-			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "JavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.GREEN + " ";
+			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "EccsJavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.GREEN + " ";
 	private static final String PREFIX_ERROR =
-			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "JavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.RED + " ";
+			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "EccsJavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.RED + " ";
 	
 	protected static final String VERSION = "1.0.0";
 	
@@ -62,7 +62,7 @@ public class JavaLoaderVelocityPlugin {
 	
 	private ProjectManager projectManager;
 	private final File projectsDir = new File(
-			"plugins" + File.separator + "JavaLoader" + File.separator + "JavaProjects").getAbsoluteFile();
+			"plugins" + File.separator + "EccsJavaLoader" + File.separator + "JavaProjects").getAbsoluteFile();
 	private ProjectStateListener projectStateListener;
 	
 	@Inject
@@ -104,7 +104,7 @@ public class JavaLoaderVelocityPlugin {
 		// and initialize it with an example.
 		if(!this.projectsDir.exists()) {
 			this.projectsDir.mkdirs();
-			this.createExampleProject();
+			// this.createExampleProject();
 		}
 		
 		// Create the project manager.
@@ -133,9 +133,9 @@ public class JavaLoaderVelocityPlugin {
 		
 		// Register "/javaloaderproxy" command.
 		CommandExecutor commandExecutor = new CommandExecutor(this.projectManager, this.projectStateListener, null,
-				"/javaloaderproxy", Arrays.asList("Pieter12345/Woesh0007", "Ecconia"), VERSION,
+				"/javaloaderproxyecc", Arrays.asList("Pieter12345/Woesh0007", "Ecconia"), VERSION,
 				(String str) -> AnsiColor.colorize(str), COMPILER_FEEDBACK_LIMIT);
-		this.proxy.getCommandManager().register("javaloaderproxy",
+		this.proxy.getCommandManager().register("javaloaderproxyecc",
 				new JavaLoaderProxyCommand(PREFIX_INFO, PREFIX_ERROR, commandExecutor, this.projectManager));
 		
 		// Loop over all project directories and add them as a JavaProject.
@@ -153,7 +153,7 @@ public class JavaLoaderVelocityPlugin {
 		
 		// Print feedback.
 		var projects = this.projectManager.getProjects();
-		this.logger.info("JavaLoader " + VERSION + " enabled. "
+		this.logger.info("EccsJavaLoader " + VERSION + " enabled. "
 				+ loadAllResult.loadedProjects.size() + "/" + projects.size() + " projects loaded.");
 	}
 	
@@ -164,8 +164,8 @@ public class JavaLoaderVelocityPlugin {
 			return;
 		}
 		
-		// Unregister "/javaloader" command.
-		this.proxy.getCommandManager().unregister("javaloader");
+		// Unregister "/javaloaderproxyecc" command.
+		this.proxy.getCommandManager().unregister("javaloaderproxyecc");
 		
 		// Unload all loaded projects and remove them from the project manager.
 		if(this.projectManager != null) {
@@ -182,7 +182,7 @@ public class JavaLoaderVelocityPlugin {
 		this.enabled = false;
 		
 		// Print feedback.
-		this.logger.info("JavaLoader " + VERSION + " disabled.");
+		this.logger.info("EccsJavaLoader " + VERSION + " disabled.");
 	}
 	
 	private void createExampleProject() {
