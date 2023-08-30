@@ -30,7 +30,6 @@ import io.github.pieter12345.javaloader.core.ProjectStateListener;
 import io.github.pieter12345.javaloader.core.ProjectManager.LoadAllResult;
 import io.github.pieter12345.javaloader.core.exceptions.LoadException;
 import io.github.pieter12345.javaloader.core.exceptions.UnloadException;
-import io.github.pieter12345.javaloader.core.utils.AnsiColor;
 import io.github.pieter12345.javaloader.core.utils.Utils;
 import io.github.pieter12345.javaloader.velocity.command.JavaLoaderProxyCommand;
 import io.github.pieter12345.javaloader.velocity.dependency.VelocityProjectDependencyParser;
@@ -40,18 +39,18 @@ import io.github.pieter12345.javaloader.velocity.dependency.VelocityProjectDepen
  * This is the main class that will be loaded by Velocity.
  * @author P.J.S. Kools
  */
-@Plugin(id = "eccsjavaloader", name = "EccsJavaLoader", version = "1.0.0",
+@Plugin(id = "eccsjavaloader", name = "EccsJavaLoader", version = "1.0.1",
 		authors = {"Pieter12345/Woesh0007", "Ecconia"}, description = "A plugin for the Velocity Minecraft proxy that"
 				+ " allows you to compile, enable, disable and hotswap Java projects in runtime.")
 public class JavaLoaderVelocityPlugin {
 	
 	// Variables & Constants.
 	private static final String PREFIX_INFO =
-			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "EccsJavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.GREEN + " ";
+			"§6[§3EccsJavaLoader§6]§2 ";
 	private static final String PREFIX_ERROR =
-			AnsiColor.YELLOW + "[" + AnsiColor.CYAN + "EccsJavaLoader" + AnsiColor.YELLOW + "]" + AnsiColor.RED + " ";
+			"§6[§3EccsJavaLoader§6]§c ";
 	
-	protected static final String VERSION = "1.0.0";
+	protected static final String VERSION = "1.0.1";
 	
 	private static final int COMPILER_FEEDBACK_LIMIT = 5; // The max amount of warnings/errors to print per recompile.
 	
@@ -134,7 +133,7 @@ public class JavaLoaderVelocityPlugin {
 		// Register "/javaloaderproxy" command.
 		CommandExecutor commandExecutor = new CommandExecutor(this.projectManager, this.projectStateListener, null,
 				"/javaloaderproxyecc", Arrays.asList("Pieter12345/Woesh0007", "Ecconia"), VERSION,
-				(String str) -> AnsiColor.colorize(str), COMPILER_FEEDBACK_LIMIT);
+				(String str) -> str.replace('&', '§'), COMPILER_FEEDBACK_LIMIT);
 		this.proxy.getCommandManager().register("javaloaderproxyecc",
 				new JavaLoaderProxyCommand(PREFIX_INFO, PREFIX_ERROR, commandExecutor, this.projectManager));
 		

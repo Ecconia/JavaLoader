@@ -12,7 +12,6 @@ import io.github.pieter12345.javaloader.core.CommandExecutor;
 import io.github.pieter12345.javaloader.core.CommandExecutor.CommandSender;
 import io.github.pieter12345.javaloader.core.CommandExecutor.MessageType;
 import io.github.pieter12345.javaloader.core.ProjectManager;
-import io.github.pieter12345.javaloader.core.utils.AnsiColor;
 import io.github.pieter12345.javaloader.core.utils.Utils;
 import net.kyori.adventure.text.Component;
 
@@ -42,14 +41,14 @@ public class JavaLoaderProxyCommand implements SimpleCommand {
 			@Override
 			public void sendMessage(MessageType messageType, String message) {
 				invocation.source().sendMessage(Component.text(
-						this.getPrefix(messageType) + message + AnsiColor.RESET));
+						this.getPrefix(messageType) + message));
 			}
 			
 			@Override
 			public void sendMessage(MessageType messageType, String... messages) {
 				if(messages.length > 0) {
 					invocation.source().sendMessage(Component.text(this.getPrefix(messageType)
-							+ Utils.glueIterable(Arrays.asList(messages), (str) -> str, "\n") + AnsiColor.RESET));
+							+ Utils.glueIterable(Arrays.asList(messages), (str) -> str, "\n")));
 				}
 			}
 			
