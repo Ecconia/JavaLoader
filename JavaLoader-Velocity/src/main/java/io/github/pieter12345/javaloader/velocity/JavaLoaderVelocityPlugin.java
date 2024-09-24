@@ -45,10 +45,8 @@ import io.github.pieter12345.javaloader.velocity.dependency.VelocityProjectDepen
 public class JavaLoaderVelocityPlugin {
 	
 	// Variables & Constants.
-	private static final String PREFIX_INFO =
-			"§6[§3EccsJavaLoader§6]§2 ";
-	private static final String PREFIX_ERROR =
-			"§6[§3EccsJavaLoader§6]§c ";
+	private static final String PREFIX_INFO = "§6[§3EccsJavaLoader§6]§2 ";
+	private static final String PREFIX_ERROR = "§6[§3EccsJavaLoader§6]§c ";
 	
 	protected static final String VERSION = "1.0.1";
 	
@@ -131,9 +129,14 @@ public class JavaLoaderVelocityPlugin {
 		};
 		
 		// Register "/javaloaderproxy" command.
-		CommandExecutor commandExecutor = new CommandExecutor(this.projectManager, this.projectStateListener, null,
-				"/javaloaderproxyecc", Arrays.asList("Pieter12345/Woesh0007", "Ecconia"), VERSION,
-				(String str) -> str.replace('&', '§'), COMPILER_FEEDBACK_LIMIT);
+		CommandExecutor commandExecutor = new CommandExecutor(
+			this.projectManager, this.projectStateListener,
+			null,
+			"/javaloaderproxyecc",
+			Arrays.asList("Pieter12345/Woesh0007", "Ecconia"),
+			VERSION,
+			(String str) -> str.replace('&', '§'), // & is still a rather common character, use § to reduce potential collision.
+			COMPILER_FEEDBACK_LIMIT);
 		this.proxy.getCommandManager().register("javaloaderproxyecc",
 				new JavaLoaderProxyCommand(PREFIX_INFO, PREFIX_ERROR, commandExecutor, this.projectManager));
 		

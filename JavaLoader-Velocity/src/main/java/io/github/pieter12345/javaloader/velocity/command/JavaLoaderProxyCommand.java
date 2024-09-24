@@ -14,6 +14,7 @@ import io.github.pieter12345.javaloader.core.CommandExecutor.MessageType;
 import io.github.pieter12345.javaloader.core.ProjectManager;
 import io.github.pieter12345.javaloader.core.utils.Utils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
  * This class represents the "/javaloaderproxy" command.
@@ -40,15 +41,15 @@ public class JavaLoaderProxyCommand implements SimpleCommand {
 			
 			@Override
 			public void sendMessage(MessageType messageType, String message) {
-				invocation.source().sendMessage(Component.text(
-						this.getPrefix(messageType) + message));
+				var wholeMessage = this.getPrefix(messageType) + message;
+				invocation.source().sendMessage(LegacyComponentSerializer.legacySection().deserialize(wholeMessage));
 			}
 			
 			@Override
 			public void sendMessage(MessageType messageType, String... messages) {
 				if(messages.length > 0) {
-					invocation.source().sendMessage(Component.text(this.getPrefix(messageType)
-							+ Utils.glueIterable(Arrays.asList(messages), (str) -> str, "\n")));
+					var wholeMessage = this.getPrefix(messageType) + Utils.glueIterable(Arrays.asList(messages), (str) -> str, "\n");
+					invocation.source().sendMessage(LegacyComponentSerializer.legacySection().deserialize(wholeMessage));
 				}
 			}
 			
